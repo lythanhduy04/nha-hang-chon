@@ -1,0 +1,1030 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FoodieGuides - Khám Phá Ẩm Thực</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+
+        /* Header */
+        header {
+            background: white;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #FF6B6B;
+        }
+
+        .logo span {
+            color: #4ECDC4;
+        }
+
+        nav {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: #FF6B6B;
+        }
+
+        .btn-primary {
+            background: #4ECDC4;
+            color: white;
+            padding: 10px 25px;
+            border-radius: 25px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .btn-primary:hover {
+            background: #45b8b0;
+            transform: translateY(-2px);
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, rgba(78, 205, 196, 0.9), rgba(255, 107, 107, 0.8)),
+                        url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 400"><rect fill="%23f0f0f0" width="1200" height="400"/></svg>');
+            background-size: cover;
+            background-position: center;
+            height: 400px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            text-align: center;
+            position: relative;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 400"><text x="50%" y="50%" font-size="120" fill="%23ffffff20" text-anchor="middle" dominant-baseline="middle">🍜🍱🍣</text></svg>');
+            opacity: 0.3;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .hero p {
+            font-size: 20px;
+            margin-bottom: 30px;
+        }
+
+        .filter-btn {
+            background: white;
+            color: #333;
+            padding: 12px 30px;
+            border-radius: 25px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 16px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s;
+        }
+
+        .filter-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 32px;
+            margin-bottom: 40px;
+            color: #333;
+        }
+
+        /* Food Grid */
+        .food-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+
+        .food-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .food-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .food-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 80px;
+        }
+
+        .food-info {
+            padding: 20px;
+        }
+
+        .food-name {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .food-rating {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin-bottom: 10px;
+        }
+
+        .stars {
+            color: #FFD700;
+            font-size: 14px;
+        }
+
+        .review-count {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .food-location {
+            color: #666;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            max-width: 900px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: white;
+            border: none;
+            font-size: 30px;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            z-index: 10;
+            transition: all 0.3s;
+        }
+
+        .modal-close:hover {
+            background: #f0f0f0;
+            transform: rotate(90deg);
+        }
+
+        /* Image Slider */
+        .modal-slider {
+            position: relative;
+            width: 100%;
+            height: 450px;
+            overflow: hidden;
+            border-radius: 20px 20px 0 0;
+        }
+
+        .slider-container {
+            display: flex;
+            height: 100%;
+            transition: transform 0.5s ease-in-out;
+        }
+
+        .slider-image {
+            min-width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 150px;
+        }
+
+        .slider-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            font-size: 24px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            z-index: 5;
+        }
+
+        .slider-btn:hover {
+            background: white;
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .slider-btn-prev {
+            left: 20px;
+        }
+
+        .slider-btn-next {
+            right: 20px;
+        }
+
+        .slider-indicators {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+            z-index: 5;
+        }
+
+        .indicator {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .indicator.active {
+            background: white;
+            width: 30px;
+            border-radius: 5px;
+        }
+
+        .modal-body {
+            padding: 30px;
+        }
+
+        .modal-header {
+            margin-bottom: 20px;
+        }
+
+        .modal-title {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .modal-rating {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .rating-badge {
+            background: #4ECDC4;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 18px;
+        }
+
+        .modal-location {
+            color: #666;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .modal-section {
+            margin-bottom: 25px;
+        }
+
+        .modal-section h3 {
+            font-size: 20px;
+            margin-bottom: 15px;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .modal-section p {
+            color: #666;
+            line-height: 1.8;
+            font-size: 16px;
+        }
+
+        /* Price Section */
+        .price-section {
+            background: linear-gradient(135deg, #FF6B6B 0%, #FF8E53 100%);
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .price-info {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .original-price {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 18px;
+            text-decoration: line-through;
+            font-weight: 500;
+        }
+
+        .sale-price {
+            color: white;
+            font-size: 36px;
+            font-weight: 700;
+            display: flex;
+            align-items: baseline;
+            gap: 10px;
+        }
+
+        .discount-badge {
+            background: #FFD700;
+            color: #333;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 16px;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            border-radius: 25px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 16px;
+            transition: all 0.3s;
+            flex: 1;
+        }
+
+        .btn-book {
+            background: #4ECDC4;
+            color: white;
+        }
+
+        .btn-book:hover {
+            background: #45b8b0;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(78, 205, 196, 0.4);
+        }
+
+        .btn-review {
+            background: white;
+            color: #333;
+            border: 2px solid #4ECDC4;
+        }
+
+        .btn-review:hover {
+            background: #4ECDC4;
+            color: white;
+        }
+
+        /* Footer */
+        footer {
+            background: #333;
+            color: white;
+            text-align: center;
+            padding: 30px 20px;
+            margin-top: 60px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 32px;
+            }
+
+            .food-grid {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+                gap: 20px;
+            }
+
+            .modal-content {
+                margin: 20px;
+            }
+
+            .modal-slider {
+                height: 300px;
+            }
+
+            .slider-image {
+                font-size: 100px;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .price-section {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+
+            .sale-price {
+                font-size: 28px;
+            }
+
+            .slider-btn {
+                width: 40px;
+                height: 40px;
+                font-size: 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="header-container">
+            <div class="logo">Foodie<span>Guides</span></div>
+            <nav>
+                <a href="#home">Trang Chủ</a>
+                <a href="#restaurants">Nhà Hàng</a>
+                <a href="#about">Về Chúng Tôi</a>
+                <button class="btn-primary">Đăng Nhập</button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Khám Phá Ẩm Thực Đỉnh Cao</h1>
+            <p>Tìm kiếm nhà hàng và món ăn yêu thích của bạn</p>
+            <button class="filter-btn" onclick="scrollToFood()">🍽️ Xem Tất Cả Món Ăn</button>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <div class="container">
+        <h2 class="section-title" id="food-section">Món Ăn Nổi Bật</h2>
+        <div class="food-grid" id="foodGrid">
+            <!-- Food cards will be generated by JavaScript -->
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal" id="foodModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()">&times;</button>
+            
+            <!-- Image Slider -->
+            <div class="modal-slider">
+                <div class="slider-container" id="sliderContainer">
+                    <!-- Images will be added by JavaScript -->
+                </div>
+                <button class="slider-btn slider-btn-prev" onclick="previousSlide()">‹</button>
+                <button class="slider-btn slider-btn-next" onclick="nextSlide()">›</button>
+                <div class="slider-indicators" id="sliderIndicators">
+                    <!-- Indicators will be added by JavaScript -->
+                </div>
+            </div>
+
+            <div class="modal-body">
+                <div class="modal-header">
+                    <h2 class="modal-title" id="modalTitle"></h2>
+                    <div class="modal-rating">
+                        <span class="rating-badge" id="modalRating"></span>
+                        <span class="stars" id="modalStars"></span>
+                        <span class="review-count" id="modalReviews"></span>
+                    </div>
+                    <div class="modal-location" id="modalLocation"></div>
+                </div>
+
+                <div class="modal-section">
+                    <h3>📝 Mô Tả & Thành Phần</h3>
+                    <p id="modalDescription"></p>
+                </div>
+
+                <div class="modal-section">
+                    <h3>🏭 Nơi Sản Xuất</h3>
+                    <p id="modalOrigin"></p>
+                </div>
+
+                <!-- Price Section -->
+                <div class="price-section">
+                    <div class="price-info">
+                        <div class="original-price" id="modalOriginalPrice"></div>
+                        <div class="sale-price" id="modalSalePrice"></div>
+                    </div>
+                    <div class="discount-badge" id="modalDiscount">
+                        🔥 <span id="discountPercent"></span>
+                    </div>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="btn btn-book">🛒 Đặt Món Ngay</button>
+                    <button class="btn btn-review">✍️ Viết Đánh Giá</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2025 FoodieGuides. Khám phá ẩm thực tuyệt vời.</p>
+    </footer>
+
+    <script>
+        let currentSlide = 0;
+        let currentFood = null;
+
+        // Sample data with multiple images and pricing
+        const foods = [
+            {
+                id: 1,
+                name: "Phở Bò Hà Nội",
+                images: ["🍜", "🥢", "🍲", "🌿"],
+                rating: 4.8,
+                reviews: 1234,
+                location: "Hà Nội, Việt Nam",
+                description: "Món phở truyền thống Hà Nội với nước dùng trong, thơm ngọt từ xương hầm nhiều giờ. Thịt bò mềm, bánh phở dai, ăn kèm với rau thơm và chanh tươi. Thành phần chính: Bánh phở tươi, thịt bò tái/chín, xương bò, hành tây, gừng, ngũ vị hương, rau thơm.",
+                origin: "Nhà hàng Phở Gia Truyền - 49 Bát Đàn, Hoàn Kiếm, Hà Nội",
+                originalPrice: "85.000đ",
+                salePrice: "65.000đ",
+                discount: 24
+            },
+            {
+                id: 2,
+                name: "Sushi Nhật Bản",
+                images: ["🍣", "🍱", "🐟", "🍙"],
+                rating: 4.9,
+                reviews: 2156,
+                location: "Tokyo, Nhật Bản",
+                description: "Sushi cao cấp được làm từ cá hồi Na Uy tươi sống, cơm trộn giấm chuẩn Nhật. Mỗi miếng sushi là tác phẩm nghệ thuật ẩm thực. Thành phần: Cá hồi Na Uy, cơm Nhật, giấm gạo, wasabi, gừng ngâm, rong biển Nori.",
+                origin: "Nhà hàng Sushi Master - Ginza, Tokyo, Nhật Bản",
+                originalPrice: "650.000đ",
+                salePrice: "450.000đ",
+                discount: 31
+            },
+            {
+                id: 3,
+                name: "Bánh Mì Việt Nam",
+                images: ["🥖", "🥪", "🌭", "🥗"],
+                rating: 4.7,
+                reviews: 3421,
+                location: "Sài Gòn, Việt Nam",
+                description: "Bánh mì Sài Gòn giòn rụm với nhân thịt nguội, pate, rau răm, dưa leo. Hòa quyện hương vị Á - Âu độc đáo. Thành phần: Bánh mì Việt Nam, pate gan, thịt nguội, xá xíu, rau răm, dưa leo, tương ớt.",
+                origin: "Bánh Mì Huỳnh Hoa - 26 Lê Thị Riêng, Q1, Sài Gòn",
+                originalPrice: "45.000đ",
+                salePrice: "35.000đ",
+                discount: 22
+            },
+            {
+                id: 4,
+                name: "Ramen Nhật Bản",
+                images: ["🍥", "🍜", "🥚", "🍲"],
+                rating: 4.8,
+                reviews: 1876,
+                location: "Osaka, Nhật Bản",
+                description: "Ramen Tonkotsu với nước dùng xương heo sệt, mì dai, trứng lòng đào và thịt xá xíu mềm. Món ăn ấm lòng người Nhật. Thành phần: Mì ramen, nước dùng xương heo, thịt xá xíu, trứng onsen, măng khô, hành lá, rong biển.",
+                origin: "Nhà hàng Ichiran Ramen - Dotonbori, Osaka, Nhật Bản",
+                originalPrice: "520.000đ",
+                salePrice: "380.000đ",
+                discount: 27
+            },
+            {
+                id: 5,
+                name: "Bún Chả Hà Nội",
+                images: ["🍲", "🔥", "🥢", "🌿"],
+                rating: 4.9,
+                reviews: 2890,
+                location: "Hà Nội, Việt Nam",
+                description: "Bún chả Hà Nội chính gốc với thịt nướng than hoa thơm lừng, nước mắm chua ngọt hài hòa. Món ăn khiến Tổng thống Obama cũng phải mê. Thành phần: Bún tươi, thịt nạc vai, thịt ba chỉ, nước mắm, rau thơm, dưa leo, đu đủ ngâm chua.",
+                origin: "Bún Chả Đắc Kim - 1 Hàng Mành, Hoàn Kiếm, Hà Nội",
+                originalPrice: "70.000đ",
+                salePrice: "55.000đ",
+                discount: 21
+            },
+            {
+                id: 6,
+                name: "Pizza Italy",
+                images: ["🍕", "🧀", "🍅", "🌿"],
+                rating: 4.7,
+                reviews: 4532,
+                location: "Naples, Ý",
+                description: "Pizza Margherita truyền thống Naples với đế mỏng giòn, phô mai Mozzarella tươi, sốt cà chua tự nhiên và húng quế thơm. Thành phần: Bột mì Italy, phô mai Mozzarella, cà chua San Marzano, dầu olive, húng quế tươi, muối biển.",
+                origin: "Pizzeria Da Michele - Via Cesare Sersale, Naples, Italy",
+                originalPrice: "580.000đ",
+                salePrice: "420.000đ",
+                discount: 28
+            },
+            {
+                id: 7,
+                name: "Cơm Tấm Sài Gòn",
+                images: ["🍱", "🍖", "🥒", "🥚"],
+                rating: 4.6,
+                reviews: 2134,
+                location: "Sài Gòn, Việt Nam",
+                description: "Cơm tấm với sườn nướng thơm phức, bì giòn tan, chả trứng béo ngậy. Ăn kèm nước mắm pha chua ngọt đậm đà. Thành phần: Cơm tấm, sườn heo nướng, bì, chả trứng, mỡ hành, dưa leo, đồ chua.",
+                origin: "Cơm Tấm Thiên Phước - 235 Phạm Ngũ Lão, Q1, Sài Gòn",
+                originalPrice: "60.000đ",
+                salePrice: "45.000đ",
+                discount: 25
+            },
+            {
+                id: 8,
+                name: "Burger Mỹ",
+                images: ["🍔", "🍟", "🥤", "🧀"],
+                rating: 4.5,
+                reviews: 5234,
+                location: "New York, Mỹ",
+                description: "Burger bò Mỹ juicy với patty 100% thịt bò Angus, phô mai cheddar tan chảy, rau xà lách tươi và sốt đặc biệt. Thành phần: Thịt bò Angus, bánh burger brioche, phô mai Cheddar, xà lách, cà chua, hành tây, sốt burger.",
+                origin: "Shake Shack - Madison Square Park, New York, USA",
+                originalPrice: "420.000đ",
+                salePrice: "320.000đ",
+                discount: 24
+            },
+            {
+                id: 9,
+                name: "Mì Ý Carbonara",
+                images: ["🍝", "🥓", "🧀", "🥚"],
+                rating: 4.8,
+                reviews: 3156,
+                location: "Rome, Ý",
+                description: "Pasta Carbonara Roma truyền thống với sốt kem từ trứng, phô mai Pecorino Romano và thịt guanciale giòn. Thành phần: Mì Spaghetti, trứng gà, phô mai Pecorino, thịt Guanciale, tiêu đen, muối.",
+                origin: "Ristorante Flavio al Velavevodetto - Via di Monte Testaccio, Rome",
+                originalPrice: "520.000đ",
+                salePrice: "380.000đ",
+                discount: 27
+            },
+            {
+                id: 10,
+                name: "Gà Rán Hàn Quốc",
+                images: ["🍗", "🌶️", "🍺", "🥬"],
+                rating: 4.7,
+                reviews: 4890,
+                location: "Seoul, Hàn Quốc",
+                description: "Gà rán kiểu Hàn giòn rụm với lớp vỏ mỏng, thấm sốt cay ngọt đặc trưng. Ăn kèm kimchi và bia thì tuyệt vời! Thành phần: Gà tươi, bột chiên giòn, sốt gochujang, tỏi, gừng, mật ong, mè rang.",
+                origin: "BHC Chicken - Gangnam, Seoul, Hàn Quốc",
+                originalPrice: "380.000đ",
+                salePrice: "290.000đ",
+                discount: 24
+            },
+            {
+                id: 11,
+                name: "Pad Thai Thái Lan",
+                images: ["🥘", "🍤", "🥜", "🍋"],
+                rating: 4.6,
+                reviews: 2567,
+                location: "Bangkok, Thái Lan",
+                description: "Món hủ tiếu xào Thái Lan với tôm tươi, đậu phụ, trứng và đậu phộng rang giòn. Vị chua ngọt cay hài hòa. Thành phần: Hủ tiếu, tôm sú, đậu phụ, trứng, giá đỗ, đậu phộng, sốt tamarind.",
+                origin: "Thip Samai Pad Thai - 313 Mahachai Rd, Bangkok",
+                originalPrice: "240.000đ",
+                salePrice: "180.000đ",
+                discount: 25
+            },
+            {
+                id: 12,
+                name: "Dimsum Trung Hoa",
+                images: ["🥟", "🥠", "🦐", "🍵"],
+				rating: 4.9,
+                reviews: 3890,
+                location: "Hong Kong, Trung Quốc",
+                description: "Dimsum Hong Kong tinh tế với há cảo tôm trong, xíu mại thơm phức, bánh bao xốp mềm. Lý tưởng cho bữa sáng. Thành phần: Bột mì, tôm tươi, thịt heo, măng khô, nấm hương, dầu mè, tương.",
+                origin: "Tim Ho Wan - 9-11 Fuk Wing Street, Hong Kong",
+                originalPrice: "320.000đ",
+                salePrice: "250.000đ",
+                discount: 22
+            }
+        ];
+
+        // Generate food cards
+        function generateFoodCards() {
+            const foodGrid = document.getElementById('foodGrid');
+            foodGrid.innerHTML = '';
+
+            foods.forEach(food => {
+                const card = document.createElement('div');
+                card.className = 'food-card';
+                card.onclick = () => openModal(food);
+
+                const stars = '⭐'.repeat(Math.floor(food.rating));
+                
+                card.innerHTML = `
+                    <div class="food-image">${food.images[0]}</div>
+                    <div class="food-info">
+                        <div class="food-name">${food.name}</div>
+                        <div class="food-rating">
+                            <span class="stars">${stars}</span>
+                            <span class="review-count">(${food.reviews.toLocaleString()} đánh giá)</span>
+                        </div>
+                        <div class="food-location">📍 ${food.location}</div>
+                    </div>
+                `;
+
+                foodGrid.appendChild(card);
+            });
+        }
+
+        // Open modal
+        function openModal(food) {
+            currentFood = food;
+            currentSlide = 0;
+            const modal = document.getElementById('foodModal');
+            const stars = '⭐'.repeat(Math.floor(food.rating));
+
+            // Setup slider
+            setupSlider(food.images);
+
+            // Fill modal content
+            document.getElementById('modalTitle').innerText = food.name;
+            document.getElementById('modalRating').innerText = food.rating;
+            document.getElementById('modalStars').innerText = stars;
+            document.getElementById('modalReviews').innerText = `(${food.reviews.toLocaleString()} đánh giá)`;
+            document.getElementById('modalLocation').innerHTML = `📍 ${food.location}`;
+            document.getElementById('modalDescription').innerText = food.description;
+            document.getElementById('modalOrigin').innerText = food.origin;
+            document.getElementById('modalOriginalPrice').innerText = `Giá gốc: ${food.originalPrice}`;
+            document.getElementById('modalSalePrice').innerText = food.salePrice;
+            document.getElementById('discountPercent').innerText = `Giảm ${food.discount}%`;
+
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Setup image slider
+        function setupSlider(images) {
+            const sliderContainer = document.getElementById('sliderContainer');
+            const sliderIndicators = document.getElementById('sliderIndicators');
+            
+            sliderContainer.innerHTML = '';
+            sliderIndicators.innerHTML = '';
+
+            // Add images
+            images.forEach((image, index) => {
+                const imageDiv = document.createElement('div');
+                imageDiv.className = 'slider-image';
+                imageDiv.innerText = image;
+                sliderContainer.appendChild(imageDiv);
+
+                // Add indicator
+                const indicator = document.createElement('div');
+                indicator.className = `indicator ${index === 0 ? 'active' : ''}`;
+                indicator.onclick = () => goToSlide(index);
+                sliderIndicators.appendChild(indicator);
+            });
+        }
+
+        // Next slide
+        function nextSlide() {
+            if (!currentFood) return;
+            currentSlide = (currentSlide + 1) % currentFood.images.length;
+            updateSlider();
+        }
+
+        // Previous slide
+        function previousSlide() {
+            if (!currentFood) return;
+            currentSlide = (currentSlide - 1 + currentFood.images.length) % currentFood.images.length;
+            updateSlider();
+        }
+
+        // Go to specific slide
+        function goToSlide(index) {
+            currentSlide = index;
+            updateSlider();
+        }
+
+        // Update slider position
+        function updateSlider() {
+            const sliderContainer = document.getElementById('sliderContainer');
+            const indicators = document.querySelectorAll('.indicator');
+            
+            sliderContainer.style.transform = `translateX(-${currentSlide * 100}%)`;
+            
+            indicators.forEach((indicator, index) => {
+                if (index === currentSlide) {
+                    indicator.classList.add('active');
+                } else {
+                    indicator.classList.remove('active');
+                }
+            });
+        }
+
+        // Close modal
+        function closeModal() {
+            const modal = document.getElementById('foodModal');
+            modal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+            currentFood = null;
+            currentSlide = 0;
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('foodModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+
+        // Keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            if (!document.getElementById('foodModal').classList.contains('active')) return;
+            
+            if (e.key === 'ArrowLeft') {
+                previousSlide();
+            } else if (e.key === 'ArrowRight') {
+                nextSlide();
+            } else if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
+
+        // Scroll to food section
+        function scrollToFood() {
+            document.getElementById('food-section').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Auto-play slider (optional)
+        let autoPlayInterval;
+        function startAutoPlay() {
+            stopAutoPlay();
+            autoPlayInterval = setInterval(() => {
+                if (document.getElementById('foodModal').classList.contains('active')) {
+                    nextSlide();
+                }
+            }, 4000);
+        }
+
+        function stopAutoPlay() {
+            if (autoPlayInterval) {
+                clearInterval(autoPlayInterval);
+            }
+        }
+
+        // Touch/Swipe support for mobile
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        document.getElementById('foodModal').addEventListener('touchstart', function(e) {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+
+        document.getElementById('foodModal').addEventListener('touchend', function(e) {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        });
+
+        function handleSwipe() {
+            if (!document.getElementById('foodModal').classList.contains('active')) return;
+            
+            const swipeThreshold = 50;
+            const diff = touchStartX - touchEndX;
+            
+            if (Math.abs(diff) > swipeThreshold) {
+                if (diff > 0) {
+                    nextSlide();
+                } else {
+                    previousSlide();
+                }
+            }
+        }
+
+        // Initialize
+        generateFoodCards();
+
+        // Optional: Start auto-play when modal opens
+        document.getElementById('foodModal').addEventListener('transitionend', function(e) {
+            if (this.classList.contains('active')) {
+                startAutoPlay();
+            } else {
+                stopAutoPlay();
+            }
+        });
+    </script>
+</body>
+</html>
